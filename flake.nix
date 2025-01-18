@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:Ervan0707/cosmic/nixvim";
+      url = "path:./nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     tmux-gruvbox = {
