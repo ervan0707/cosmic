@@ -1,0 +1,10 @@
+# .sops.yaml
+
+keys:
+  - &personal age1dgh3n2l25kyjldkkdvlf5n04xv27vdauecnm0fvp72gkae48rqnqrhew3n
+  - &work age1ycz20uy23wl5m78jxa3ax7ut560mukftmxuam8728rnumc9mwegsn7ltxp
+creation_rules:
+  - path_regex: secrets/personal.yaml$
+    age: *personal
+  - path_regex: secrets/work.yaml$
+    age: *work
