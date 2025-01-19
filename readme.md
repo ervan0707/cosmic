@@ -1,5 +1,20 @@
 ## Declarative dotfiles configuration using Nix Darwin and Home Manager **(Always WIP)**
 
+### TLDR
+
+This config exists because I was tired of:
+- Opening a new laptop/machine and spending a whole day setting it up
+- Having different versions of dotfiles scattered everywhere
+- Forgetting what I installed or changed on my machine
+- Trying to remember "what was that package again?"
+- Making things work on one machine but break on another
+- Having my work and personal setups drift apart
+
+So I made this. It's basically my entire system written in Nix - one config that:
+- Sets up everything the same way, every time
+- Works on all my Macs (it's Darwin/macOS focused, but you can tweak it for other systems)
+- Keeps my work and personal setups in sync, but separate when needed
+
 ## 📋 Features
 
 - 🛠 Development environments for multiple languages
