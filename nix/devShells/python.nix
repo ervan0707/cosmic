@@ -4,7 +4,7 @@ let
   python = pkgs.python39;
   pythonEnv = python.withPackages (
     ps: with ps; [
-      ruff
+      # ruff
       # ipython
       # black
       # flake8

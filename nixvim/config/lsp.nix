@@ -162,7 +162,7 @@
         enable = true;
       };
       ruff = {
-        enable = true;
+        enable = false;
       };
       rust_analyzer = {
         enable = true;

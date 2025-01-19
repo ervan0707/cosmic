@@ -190,11 +190,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737188535,
-        "narHash": "sha256-O2ttwW1/dUc/Y+Rf48Njtr4tZpRJhy8FhafikekIjMY=",
+        "lastModified": 1737221749,
+        "narHash": "sha256-igllW0yG+UbetvhT11jnt9RppSHXYgMykYhZJeqfHs0=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "1e36429705f9af2d00a517ba46a4f21ef8a8194f",
+        "rev": "97d7946b5e107dd03cc82f21165251d4e0159655",
         "type": "github"
       },
       "original": {
@@ -384,8 +384,25 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
+        "sketchybar-app-font": "sketchybar-app-font",
         "sops-nix": "sops-nix",
         "tmux-gruvbox": "tmux-gruvbox"
+      }
+    },
+    "sketchybar-app-font": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1736936034,
+        "narHash": "sha256-Kx7Uazrmyn7yQedqnY1YJXSY2QFe0nCEIFLFUZwS9Tk=",
+        "owner": "kvndrsslr",
+        "repo": "sketchybar-app-font",
+        "rev": "c020ae039fac9ff7c02e4c7031932a16c2405b5c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kvndrsslr",
+        "repo": "sketchybar-app-font",
+        "type": "github"
       }
     },
     "sops-nix": {

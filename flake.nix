@@ -23,6 +23,10 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sketchybar-app-font = {
+      url = "github:kvndrsslr/sketchybar-app-font";
+      flake = false;
+    };
   };
 
   outputs =
@@ -38,6 +42,7 @@
       systems = builtins.attrValues (builtins.mapAttrs (name: value: value.system) lib.utils.systems);
       imports = [
         ./overlays
+        ./overlays/pkgs/nodePkgs
       ];
       perSystem =
         {
