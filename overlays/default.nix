@@ -10,13 +10,13 @@
     attrsets.genAttrs packages (name: callPackage ./${name}.nix { })
     // {
       ruff = prev.ruff.overrideAttrs (old: {
-              doCheck = false;
+        doCheck = false;
       });
       gitWithConfig = prev.callPackage ./pkgs/git.nix { };
-      sbar_menus = prev.callPackage ../pkgs/sketchybar/helpers/menus { };
-      sbar_events = prev.callPackage ../pkgs/sketchybar/helpers/event_providers { };
-      sbarLua = prev.callPackage ../pkgs/sketchybar/helpers/sbar.nix { };
-      sketchybarConfigLua = prev.callPackage ../pkgs/sketchybar { };
+      sbar_menus = prev.callPackage ./pkgs/sketchybar/helpers/menus { };
+      sbar_events = prev.callPackage ./pkgs/sketchybar/helpers/event_providers { };
+      sbarLua = prev.callPackage ./pkgs/sketchybar/helpers/sbar.nix { };
+      sketchybarConfigLua = prev.callPackage ./pkgs/sketchybar { };
       sf-symbols-font = final.sf-symbols.overrideAttrs (old: {
         pname = "sf-symbols-font";
         installPhase = ''

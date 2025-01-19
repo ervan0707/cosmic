@@ -28,7 +28,7 @@
       file.".hushlogin".text = "";
     };
 
-    home.activation.installGhostty = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    home.activation.installGhostty = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       export GH_TOKEN=$(cat ${config.sops.secrets.github_token.path}) && \
       [[ ! -d ~/Applications/Ghostty.app ]] && cd /tmp && \
         ${lib.getExe pkgs.gh} release download -R mitchellh/ghostty tip -p 'ghostty-macos-universal.zip' --clobber && \
