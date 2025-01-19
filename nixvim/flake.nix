@@ -66,8 +66,6 @@
             nixfmt-rfc-style
 
             pyright
-            # ruff
-            # python312Packages.ruff
 
             rust-analyzer
             rustfmt

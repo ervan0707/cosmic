@@ -161,8 +161,10 @@
       pyright = {
         enable = true;
       };
+
       ruff = {
-        enable = false;
+        enable = true;
+        package = pkgs.python311Packages.ruff;
       };
       rust_analyzer = {
         enable = true;

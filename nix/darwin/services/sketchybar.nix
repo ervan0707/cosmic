@@ -12,7 +12,7 @@ in
 
   services = {
     sketchybar = {
-      enable = true;
+      enable = false;
 
       extraPackages = with pkgs; [
         sbar_menus
