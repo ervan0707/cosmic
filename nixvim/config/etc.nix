@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  plugins.smear-cursor.enable = true;
   plugins.comment.enable = true;
   plugins.treesitter = {
     enable = true;
