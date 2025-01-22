@@ -12,7 +12,8 @@
 
   config = lib.mkIf config.modules.fish.enable {
     programs.fish = {
-      enable = true;
+      # enable = true;
+
       shellAliases = {
         # Navigation
         ".." = "cd ..";
