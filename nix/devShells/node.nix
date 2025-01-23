@@ -1,4 +1,8 @@
-{ pkgs, lib ? pkgs.lib,... }:
+{
+  pkgs,
+  lib ? pkgs.lib,
+  ...
+}:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
 
@@ -9,7 +13,7 @@ let
   mkNodeShell =
     nodeVersion:
     let
-      nodejs = pkgs.${nodeVersion};  # Use the full package name directly
+      nodejs = pkgs.${nodeVersion}; # Use the full package name directly
     in
     mkShellConfig {
       name = "${nodeVersion}-dev";

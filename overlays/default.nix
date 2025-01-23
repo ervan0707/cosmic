@@ -1,4 +1,4 @@
-{ inputs,... }:
+{ inputs, ... }:
 {
   flake.overlays.macos =
     final: prev:

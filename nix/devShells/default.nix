@@ -1,4 +1,8 @@
-{ pkgs, lib ? pkgs.lib,... }:
+{
+  pkgs,
+  lib ? pkgs.lib,
+  ...
+}:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
   nodeEnvs = import ./node.nix { inherit pkgs; };
@@ -26,7 +30,7 @@ in
   default = mkShellConfig {
     name = "full-dev";
 
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
 
     inputsFrom = [
       (import ./go.nix { inherit pkgs; })
