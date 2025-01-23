@@ -1,21 +1,10 @@
-{ pkgs }:
+{ pkgs, lib ? pkgs.lib,... }:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
-  inherit (import ./lib/versions.nix) nodeVersions;
   nodeEnvs = import ./node.nix { inherit pkgs; };
 
-  # Helper function to create node environment attributes
-  mkNodeAttrs =
-    node:
-    {
-      "node" = node.default;
-    }
-    // builtins.listToAttrs (
-      map (version: {
-        name = "node_${version}";
-        value = node."node_${version}";
-      }) nodeVersions
-    );
+  # Get all nodejs versions directly
+  nodejsVersions = builtins.filter (lib.strings.hasPrefix "nodejs_") (builtins.attrNames pkgs);
 in
 {
   go = import ./go.nix { inherit pkgs; };
@@ -24,16 +13,20 @@ in
   lua = import ./lua.nix { inherit pkgs; };
   php = import ./php.nix { inherit pkgs; };
   nix = import ./nix.nix { inherit pkgs; };
+  node = nodeEnvs.default;
 }
-// mkNodeAttrs nodeEnvs
+// builtins.listToAttrs (
+  map (version: {
+    name = version;
+    value = nodeEnvs.${version};
+  }) nodejsVersions
+)
 // {
   # Combined development environment with all tools
   default = mkShellConfig {
     name = "full-dev";
 
-    packages = with pkgs; [
-
-    ];
+    packages = with pkgs; [];
 
     inputsFrom = [
       (import ./go.nix { inherit pkgs; })
@@ -43,7 +36,6 @@ in
       (import ./lua.nix { inherit pkgs; })
       (import ./php.nix { inherit pkgs; })
       (import ./nix.nix { inherit pkgs; })
-
     ];
 
     shellHook = ''

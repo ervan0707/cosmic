@@ -1,20 +1,21 @@
-{ pkgs }:
+{ pkgs, lib ? pkgs.lib,... }:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
-  inherit (import ./lib/versions.nix) nodeVersions;
+
+  # Get available Node.js versions
+  nodejsVersions = builtins.filter (lib.strings.hasPrefix "nodejs_") (builtins.attrNames pkgs);
 
   # Helper function to create Node.js development shell
   mkNodeShell =
     nodeVersion:
     let
-      nodejs = pkgs."nodejs_${nodeVersion}";
+      nodejs = pkgs.${nodeVersion};  # Use the full package name directly
     in
     mkShellConfig {
-      name = "node-${nodeVersion}-dev";
+      name = "${nodeVersion}-dev";
 
       packages = with pkgs; [
         nodejs
-        nodePackages.pnpm
         nodePackages.typescript
       ];
 
@@ -25,21 +26,20 @@ let
       };
 
       shellHook = ''
-        echo "🚀 Welcome to Node.js ${nodeVersion} development environment!"
+        echo "🚀 Welcome to ${nodeVersion} development environment!"
         echo "Available tools:"
         echo "  - node:" (node --version)
-        echo "  - pnpm:" (pnpm --version)
         echo "  - typescript:" (tsc --version)
       '';
     };
 in
 {
   # Default to latest LTS (node 20)
-  default = mkNodeShell "20";
+  default = mkNodeShell "nodejs_20";
 }
 // builtins.listToAttrs (
   map (version: {
-    name = "node_${version}";
+    name = version;
     value = mkNodeShell version;
-  }) nodeVersions
+  }) nodejsVersions
 )
