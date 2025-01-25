@@ -23,6 +23,12 @@ in
       system = "aarch64-darwin";
       defaultSopsFile = ../secrets/personal.yaml;
     };
+    "vm" = {
+      username = "ervan";
+      homeDirectory = "/home/ervan";
+      system = "aarch64-linux";
+      defaultSopsFile = ../secrets/vm.yaml;
+    };
   };
 
   # Helper function for darwin configuration

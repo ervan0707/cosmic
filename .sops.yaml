@@ -3,8 +3,11 @@
 keys:
   - &personal age1dgh3n2l25kyjldkkdvlf5n04xv27vdauecnm0fvp72gkae48rqnqrhew3n
   - &work age1ycz20uy23wl5m78jxa3ax7ut560mukftmxuam8728rnumc9mwegsn7ltxp
+  - &vm age1tzw6hrke4nee9srmprpas8kk64aq5lql48pfl0l4gn5edffc5q6s68rc2n
 creation_rules:
   - path_regex: secrets/personal.yaml$
     age: *personal
   - path_regex: secrets/work.yaml$
     age: *work
+  - path_regex: secrets/vm.yaml$
+    age: *vm
