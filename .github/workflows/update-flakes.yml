@@ -1,0 +1,41 @@
+name: Update Flakes
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # runs weekly on Sunday at 00:00
+    - cron: "0 0 25 * *" # runs on day-of-month 25 at 00:00
+  # Allows manual trigger
+  workflow_dispatch:
+
+jobs:
+  update-main-flake:
+    runs-on: macos-latest
+    steps:
+      - name: Update Root Flake
+        uses: DeterminateSystems/update-flake-lock@v24
+        with:
+          pr-title: "chore: update root flake.lock" # Title of PR
+          pr-labels: | # Labels to add to PR
+            dependencies
+            automated
+          git-author-name: "GitHub Actions"
+          git-author-email: "actions@github.com"
+          git-committer-name: "GitHub Actions"
+          git-committer-email: "actions@github.com"
+
+  update-nixvim-flake:
+    runs-on: macos-latest
+    steps:
+      - name: Update Nixvim Flake
+        uses: DeterminateSystems/update-flake-lock@v24
+        with:
+          path: nixvim # Path to the nixvim subdirectory
+          pr-title: "chore: update nixvim flake.lock"
+          pr-labels: |
+            dependencies
+            automated
+            nixvim
+          git-author-name: "GitHub Actions"
+          git-author-email: "actions@github.com"
+          git-committer-name: "GitHub Actions"
+          git-committer-email: "actions@github.com"
