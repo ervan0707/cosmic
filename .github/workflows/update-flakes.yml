@@ -50,6 +50,3 @@ jobs:
             dependencies
             automated
             weekly
-
-      - run: nix flake show .
-      - run: cd nixvim && nix flake update && nix build .#nixvim
