@@ -52,4 +52,4 @@ jobs:
             weekly
 
       - run: nix flake show .
-      - run: nix build .#nixvim
+      - run: cd nixvim && nix flake update && nix build .#nixvim
