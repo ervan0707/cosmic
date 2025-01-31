@@ -1,45 +1,55 @@
-name: Update Flakes
-
+name: "CI"
 on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch: 
   schedule:
-    - cron: "0 0 * * 0" # runs weekly on Sunday at 00:00
-    - cron: "0 0 25 * *" # runs on day-of-month 25 at 00:00
-  # Allows manual trigger
-  workflow_dispatch:
+    - cron: '0 0 * * 0'  # runs weekly on Sunday at 00:00
+    - cron: '0 0 25 * *' # runs on day-of-month 25 at 00:00
 
 jobs:
-  update-main-flake:
-    runs-on: macos-latest
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      - name: Update Root Flake
-        uses: DeterminateSystems/update-flake-lock@v24
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v16
         with:
-          pr-title: "chore: update root flake.lock" # Title of PR
-          pr-labels: | # Labels to add to PR
-            dependencies
-            automated
-          git-author-name: "GitHub Actions"
-          git-author-email: "actions@github.com"
-          git-committer-name: "GitHub Actions"
-          git-committer-email: "actions@github.com"
+          github-token: ${{ secrets.GH_TOKEN }}
+          extra-conf: "experimental-features = nix-command flakes pipe-operators" 
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: DeterminateSystems/flake-checker-action@v9
 
-  update-nixvim-flake:
-    runs-on: macos-latest
-    steps:
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      - name: Update Nixvim Flake
-        uses: DeterminateSystems/update-flake-lock@v24
+      - uses: DeterminateSystems/update-flake-lock@v24
+        name: Update flake.lock
+        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.schedule == '0 0 25 * *' }}
         with:
-          path: nixvim # Path to the nixvim subdirectory
-          pr-title: "chore: update nixvim flake.lock"
+          token: ${{ secrets.GH_TOKEN }}
+          inputs: nixpkgs-master nixpkgs-stable nixpkgs-unstable nix nix-darwin flake-parts home-manager pre-commit-hooks
+          branch: monthly-lock
+          commit-msg: 'chore(lockfile): update flake.lock'
+          pr-title: 'chore(lockfile): update flake.lock'
           pr-labels: |
             dependencies
             automated
-            nixvim
-          git-author-name: "GitHub Actions"
-          git-author-email: "actions@github.com"
-          git-committer-name: "GitHub Actions"
-          git-committer-email: "actions@github.com"
+            monthly
+
+      - uses: DeterminateSystems/update-flake-lock@v24
+        name: Update flake.lock
+        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.schedule == '0 0 * * 0' }}
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          inputs: nixvim nixpkgs-fmt neorg-overlay home-manager nix-env ts-rescript vimPlugins_vim-rescript vimPlugins_supermaven-nvim
+          branch: weekly-lock
+          commit-msg: 'chore(lockfile): update flake.lock'
+          pr-title: 'chore(lockfile): update flake.lock'
+          pr-labels: |
+            dependencies
+            automated
+            weekly
+
+      - run: nix flake show .
+      - run: nix build .#nixvim
