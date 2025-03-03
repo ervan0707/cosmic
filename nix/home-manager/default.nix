@@ -2,6 +2,7 @@
   config,
   pkgs,
   isNixDarwin ? false,
+  lib ? pkgs.lib,
   ...
 }:
 
@@ -19,7 +20,7 @@
   };
 
   # Disable nix package management in home-manager when using nix darin
-  nix.enable = !(pkgs.stdenv.isDarwin && isNixDarwin);
+  # nix.enable = !(pkgs.stdenv.isDarwin && isNixDarwin);
 
   home = {
     inherit (config._module.args) username homeDirectory;

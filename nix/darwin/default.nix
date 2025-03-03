@@ -56,9 +56,9 @@
       '';
   };
 
-  services.nix-daemon.enable = true;
+  # services.nix-daemon.enable = true;
 
-  security.pam.enableSudoTouchIdAuth = true; # Enable Touch ID for sudo
+  security.pam.services.sudo_local.touchIdAuth = true; # Enable Touch ID for sudo
 
   # Used for backwards compatibility, please read the changelog before changing.
   system.stateVersion = 4;
