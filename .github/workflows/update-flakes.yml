@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '0 0 * * 0' # runs weekly on Sunday at midnight
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  packages: write
+
 jobs:
   lockfile-root:
     runs-on: ubuntu-latest
