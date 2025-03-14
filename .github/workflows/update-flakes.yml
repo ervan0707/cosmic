@@ -1,52 +1,47 @@
-name: "CI"
+name: update-flake-locks
 on:
-  pull_request:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: # allows manual triggers
   schedule:
-    - cron: "0 0 * * 0" # runs weekly on Sunday at 00:00
-    - cron: "0 0 25 * *" # runs on day-of-month 25 at 00:00
+    - cron: '0 0 * * 0' # runs weekly on Sunday at midnight
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  packages: write
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [macos-latest]
-    runs-on: ${{ matrix.os }}
+  lockfile-root:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@v16
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          extra-conf: "experimental-features = nix-command flakes pipe-operators"
-      - uses: DeterminateSystems/flakehub-cache-action@main
-      - uses: DeterminateSystems/flake-checker-action@v9
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - uses: DeterminateSystems/update-flake-lock@v24
-        name: Update flake.lock
-        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.schedule == '0 0 25 * *' }}
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Update root flake.lock
+        uses: DeterminateSystems/update-flake-lock@main
         with:
-          token: ${{ secrets.GH_TOKEN }}
-          inputs: nixpkgs-master nixpkgs-stable nixpkgs-unstable nix nix-darwin flake-parts home-manager pre-commit-hooks
-          branch: monthly-lock
-          commit-msg: "chore(lockfile): update flake.lock"
-          pr-title: "chore(lockfile): update flake.lock"
+          pr-title: "fix: update root flake.lock"
           pr-labels: |
             dependencies
             automated
-            monthly
 
-      - uses: DeterminateSystems/update-flake-lock@v24
-        name: Update flake.lock
-        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.schedule == '0 0 * * 0' }}
+  lockfile-nixvim:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Update nixvim flake.lock
+        uses: DeterminateSystems/update-flake-lock@main
         with:
-          token: ${{ secrets.GH_TOKEN }}
-          inputs: nixvim nixpkgs-fmt neorg-overlay home-manager nix-env ts-rescript vimPlugins_vim-rescript vimPlugins_supermaven-nvim
-          branch: weekly-lock
-          commit-msg: "chore(lockfile): update flake.lock"
-          pr-title: "chore(lockfile): update flake.lock"
+          path: nixvim
+          pr-title: "fix: update nixvim flake.lock"
           pr-labels: |
             dependencies
             automated
-            weekly
