@@ -5,7 +5,7 @@
     let
       inherit (prev.lib) attrsets;
       callPackage = prev.newScope { };
-      packages = [ "sf-symbols" ];
+      packages = [ "sf-symbols" "r-auth" ];
     in
     attrsets.genAttrs packages (name: callPackage ./${name}.nix { })
     // {
