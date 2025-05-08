@@ -23,6 +23,12 @@
       fastfetch
       inputs.nixvim.packages.${pkgs.system}.default
       pkgs.r-auth
+
+      nodejs_20
+      typescript
+
+      php82
+      php82Packages.composer
     ];
   };
 }
