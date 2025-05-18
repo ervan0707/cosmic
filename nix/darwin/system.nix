@@ -3,10 +3,11 @@
   pkgs,
   config,
   ...
-}:
-
-{
+}: let
+  username = builtins.head (builtins.attrNames config.users.users);
+in {
   system = {
+    primaryUser = username;
     defaults = {
       dock = {
         autohide = true;
