@@ -23,6 +23,12 @@
       fastfetch
       inputs.nixvim.packages.${pkgs.system}.default
       pkgs.r-auth
+
+      nodejs
+
+      rustc
+      cargo
+
     ];
   };
 }
