@@ -78,7 +78,7 @@
           "gotmpl"
         ];
         cmd = [ "gopls" ];
-        rootDir = ''require("lspconfig").util.root_pattern("go.work", "go.mod", ".git")'';
+        # rootDir = ''require("lspconfig").util.root_pattern("go.work", "go.mod", ".git")'';
         settings = {
           gopls = {
             gofumpt = true;
