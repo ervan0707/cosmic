@@ -32,6 +32,7 @@
 
       rustc
       cargo
+      rustup
 
     ];
   };

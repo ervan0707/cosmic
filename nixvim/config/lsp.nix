@@ -78,7 +78,7 @@
           "gotmpl"
         ];
         cmd = [ "gopls" ];
-        # rootDir = ''require("lspconfig").util.root_pattern("go.work", "go.mod", ".git")'';
+
         settings = {
           gopls = {
             gofumpt = true;
@@ -143,7 +143,7 @@
         enable = true;
         filetypes = [ "nix" ];
         cmd = [ "nixd" ];
-        rootDir = "require('lspconfig.util').root_pattern('flake.nix', '.git')";
+
         settings = {
           nixpkgs = {
             expr = "import <nixpkgs> { }";
