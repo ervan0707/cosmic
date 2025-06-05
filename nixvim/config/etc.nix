@@ -21,20 +21,20 @@
   extraPlugins = with pkgs.vimPlugins; [
     nvim-treesitter.withAllGrammars
 
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "codestats";
-      src = pkgs.fetchFromGitHub {
-        owner = "ervan0707";
-        repo = "codestats.nvim";
-        rev = "v1.1.1";
-        hash = "sha256-ZV5dEA7YFOOCkXKTFsYTBRJmRQvYZy+AAqsQHWxppa4=";
-      };
-      dependencies = with pkgs.vimPlugins; [
-        plenary-nvim
-        nui-nvim
-      ];
-
-    })
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "codestats";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "ervan0707";
+    #     repo = "codestats.nvim";
+    #     rev = "v1.1.1";
+    #     hash = "sha256-ZV5dEA7YFOOCkXKTFsYTBRJmRQvYZy+AAqsQHWxppa4=";
+    #   };
+    #   dependencies = with pkgs.vimPlugins; [
+    #     plenary-nvim
+    #     nui-nvim
+    #   ];
+    #
+    # })
   ];
 
   extraConfigLua = ''
