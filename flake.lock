@@ -185,15 +185,14 @@
         "nixvim": "nixvim_2"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-UIsICRfpe+78xJEeb25uX+OqqByPg2hBp5S9/FyXFkE=",
         "path": "./nixvim",
         "type": "path"
       },
       "original": {
         "path": "./nixvim",
         "type": "path"
-      }
+      },
+      "parent": []
     },
     "nixvim_2": {
       "inputs": {

@@ -37,15 +37,17 @@
     # })
   ];
 
+  # require('codestats').setup({
+  #     api_url = 'https://exp.seni.cloud/api',
+  #     username = 'ervan',
+  #     api_key = os.getenv("CODESTATS_API_KEY") or "",
+  #     excluded_filetypes = { 'log' },
+  #     pulse_interval = 10000,
+  # })
+
   extraConfigLua = ''
     vim.opt.clipboard:append("unnamedplus")
-    require('codestats').setup({
-        api_url = 'https://exp.seni.cloud/api',
-        username = 'ervan',
-        api_key = os.getenv("CODESTATS_API_KEY") or "",
-        excluded_filetypes = { 'log' },
-        pulse_interval = 10000,
-    })
+
     -- enable elite mode
     vim.g.elite_mode = 1
 
