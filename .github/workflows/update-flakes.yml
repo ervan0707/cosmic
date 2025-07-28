@@ -2,7 +2,7 @@ name: update-flake-locks
 on:
   workflow_dispatch: # allows manual triggers
   schedule:
-    - cron: '0 0 * * 0' # runs weekly on Sunday at midnight
+    - cron: "0 0 * * 0" # runs weekly on Sunday at midnight
 
 permissions:
   contents: write
@@ -15,33 +15,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@v9
 
       - name: Update root flake.lock
-        uses: DeterminateSystems/update-flake-lock@main
+        uses: DeterminateSystems/update-flake-lock@v20
         with:
-          pr-title: "fix: update root flake.lock"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pr-title: "chore: update root flake.lock dependencies"
           pr-labels: |
             dependencies
             automated
+          commit-msg: "chore: update root flake.lock dependencies"
+          branch: "auto-update/root-flake"
 
   lockfile-nixvim:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@v9
 
       - name: Update nixvim flake.lock
-        uses: DeterminateSystems/update-flake-lock@main
+        uses: DeterminateSystems/update-flake-lock@v20
         with:
-          path: nixvim
-          pr-title: "fix: update nixvim flake.lock"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./nixvim
+          pr-title: "chore: update nixvim flake.lock dependencies"
           pr-labels: |
             dependencies
             automated
+          commit-msg: "chore: update nixvim flake.lock dependencies"
+          branch: "auto-update/nixvim-flake"
