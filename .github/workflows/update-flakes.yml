@@ -23,7 +23,7 @@ jobs:
       - name: Update root flake.lock
         uses: DeterminateSystems/update-flake-lock@v20
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           pr-title: "chore: update root flake.lock dependencies"
           pr-labels: |
             dependencies
@@ -43,7 +43,7 @@ jobs:
       - name: Update nixvim flake.lock
         uses: DeterminateSystems/update-flake-lock@v20
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           path: ./nixvim
           pr-title: "chore: update nixvim flake.lock dependencies"
           pr-labels: |
