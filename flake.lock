@@ -148,11 +148,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1753690769,
-        "narHash": "sha256-dftbWntoyQKIlYOt9mSSIIiE5L6xpV3DMMyEZfV7Tn0=",
+        "lastModified": 1753691747,
+        "narHash": "sha256-Bdb74yRZLIftspqIhOQqNRlAdLicJNbLv7JlrOt/gpw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "51af08a5a2511a027cce68ce2025387983a50f19",
+        "rev": "fe25cef86c5ee5b4b9b351576e990a5e7769b6da",
         "type": "github"
       },
       "original": {
@@ -185,14 +185,20 @@
         "nixvim": "nixvim_2"
       },
       "locked": {
-        "path": "./nixvim",
-        "type": "path"
+        "dir": "nixvim",
+        "lastModified": 1753691812,
+        "narHash": "sha256-rd0O7ONuiK7yk3bRIHS0SYxMvdgYepL17gqQlT4oDVY=",
+        "owner": "Ervan0707",
+        "repo": "cosmic",
+        "rev": "ef2040015f2da5b70c51283e23f6820b36fafc15",
+        "type": "github"
       },
       "original": {
-        "path": "./nixvim",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "nixvim",
+        "owner": "Ervan0707",
+        "repo": "cosmic",
+        "type": "github"
+      }
     },
     "nixvim_2": {
       "inputs": {
