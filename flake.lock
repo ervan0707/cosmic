@@ -186,11 +186,11 @@
       },
       "locked": {
         "dir": "nixvim",
-        "lastModified": 1756779048,
-        "narHash": "sha256-qQKSgJYt057dSKPLknHoZnjgUSxV9oosmSx/Hzg/ASQ=",
+        "lastModified": 1756862583,
+        "narHash": "sha256-ZB3fIsji56l4AW5FQ8EBt1aXtseZGlQ7LieRtmguSl8=",
         "owner": "Ervan0707",
         "repo": "cosmic",
-        "rev": "141654ca030c43960411dd5dea68c65bf625b1d2",
+        "rev": "e8124af2c20107ae62af3b2d09872fd3d7d75cb3",
         "type": "github"
       },
       "original": {

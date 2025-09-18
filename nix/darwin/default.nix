@@ -27,25 +27,30 @@
     fish.shellInit = # fish
       ''
         function ndev
-           # List of supported languages
-           set -l valid_languages go lua nix node php python rust
+          # List of supported languages
+          set -l valid_languages go lua nix node php python rust
 
-           if test (count $argv) = 0
-             echo "Usage: ndev <language>"
-             echo "Supported languages: $valid_languages"
-             return 1
-           end
+          if test (count $argv) = 0
+            echo "Usage: ndev <language>"
+            echo "Supported languages: $valid_languages"
+            echo "Special: nodejs_<version> (e.g., nodejs_18, nodejs_20)"
+            return 1
+          end
 
-           set -l requested_lang $argv[1]
+          set -l requested_lang $argv[1]
 
-           if contains $requested_lang $valid_languages
-             nix develop github:Ervan0707/cosmic#$requested_lang
-           else
-             echo "Error: '$requested_lang' is not supported"
-             echo "Supported languages: $valid_languages"
-             return 1
-           end
-         end
+          # Check if it's a nodejs version request
+          if string match -q "nodejs_*" $requested_lang
+            nix develop github:Ervan0707/cosmic#$requested_lang
+          else if contains $requested_lang $valid_languages
+            nix develop github:Ervan0707/cosmic#$requested_lang
+          else
+            echo "Error: '$requested_lang' is not supported"
+            echo "Supported languages: $valid_languages"
+            echo "Special: nodejs_<version> (e.g., nodejs_18, nodejs_20)"
+            return 1
+          end
+        end
 
         # https://github.com/LnL7/nix-darwin/issues/122
         for p in (string split : ${config.environment.systemPath})
