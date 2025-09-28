@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1758447883,
-        "narHash": "sha256-yGA6MV0E4JSEXqLTb4ZZkmdJZcoQ8HUzihRRX12Bvpg=",
+        "lastModified": 1758805352,
+        "narHash": "sha256-BHdc43Lkayd+72W/NXRKHzX5AZ+28F3xaUs3a88/Uew=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "25381509d5c91bbf3c30e23abc6d8476d2143cd1",
+        "rev": "c48e963a5558eb1c3827d59d21c5193622a1477c",
         "type": "github"
       },
       "original": {
@@ -103,11 +103,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1758464306,
-        "narHash": "sha256-i56XRXqjwJRdVYmpzVUQ0ktqBBHqNzQHQMQvFRF/acQ=",
+        "lastModified": 1758997081,
+        "narHash": "sha256-c4SbPEbR9yP5erODj4niMO7N+2ONEoGnWnt5hauAHRg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "939e91e1cff1f99736c5b02529658218ed819a2a",
+        "rev": "26ace005b720b7628fdf2d4923e7feecdd1631c4",
         "type": "github"
       },
       "original": {
@@ -148,11 +148,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1758532305,
-        "narHash": "sha256-Mo4WkWtRDkkngH0nIzN7Th2OUYw1jMyRgj4ZNcafbI8=",
+        "lastModified": 1759021703,
+        "narHash": "sha256-3Uix9yFOOu740PtK7xaSf48E3hm1sLiOHQyMzkbL+ZM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "765a2c8fdd216ae9e0686bdd192950dcaf8784c5",
+        "rev": "60df26f7e0c4a30692d4d7c17be8b8f5636648c7",
         "type": "github"
       },
       "original": {
@@ -186,11 +186,11 @@
       },
       "locked": {
         "dir": "nixvim",
-        "lastModified": 1758177863,
-        "narHash": "sha256-G7MKRD7oK3dCbM7m9RoX1YtGAr30Ta6dhV+zGIuMmDY=",
+        "lastModified": 1758532638,
+        "narHash": "sha256-0wt28VEUmIJQW9L6sWhzkMqOCeJRJMjqjIhyAA6XQV4=",
         "owner": "Ervan0707",
         "repo": "cosmic",
-        "rev": "b9e7f08b6e1c85cf7bc5641317d7ac306f40dc76",
+        "rev": "7ef6cb2a209397613cb6859197afaec5c16f397d",
         "type": "github"
       },
       "original": {
@@ -263,11 +263,11 @@
     "sketchybar-app-font": {
       "flake": false,
       "locked": {
-        "lastModified": 1758451614,
-        "narHash": "sha256-kgri0BnH4hfWfTxqFkQddPqW1gY702DXXbMywEP1TP4=",
+        "lastModified": 1758957604,
+        "narHash": "sha256-KNcx5aE2Tu2CN/MWbAEknx1FeljPuktXB12103m+t/A=",
         "owner": "kvndrsslr",
         "repo": "sketchybar-app-font",
-        "rev": "2ccb52f36b6703f051bd2de54e95e1a6ba3c746e",
+        "rev": "d51fbf31c01ad351670dcbc0d7c108a9a3ea5a75",
         "type": "github"
       },
       "original": {
