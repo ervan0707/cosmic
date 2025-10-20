@@ -30,9 +30,9 @@
       php82
       php82Packages.composer
 
-      rustc
-      cargo
-      rustup
+      # rustc
+      # cargo
+      # rustup
 
     ];
   };

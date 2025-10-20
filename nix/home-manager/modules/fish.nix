@@ -104,9 +104,13 @@
           	direnv hook fish | source
         '';
       }
-      (lib.mkIf (!pkgs.stdenv.isDarwin) {
+
+      {
         enable = true;
-      })
+      }
+      # (lib.mkIf (!pkgs.stdenv.isDarwin) {
+      #   enable = true;
+      # })
     ];
   };
 }
