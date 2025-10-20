@@ -21,6 +21,7 @@
 
   # Disable nix package management in home-manager when using nix darin
   nix = lib.mkIf (!(pkgs.stdenv.isDarwin && isNixDarwin)) {
+    package = pkgs.nix;
     enable = true;
   };
 

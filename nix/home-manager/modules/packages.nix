@@ -20,7 +20,7 @@
       tree
       bat
 
-      fastfetch
+      # fastfetch
       inputs.nixvim.packages.${pkgs.system}.default
       pkgs.r-auth
 
@@ -30,9 +30,9 @@
       php82
       php82Packages.composer
 
-      # rustc
-      # cargo
-      # rustup
+      rustc
+      cargo
+      rustup
 
     ];
   };
