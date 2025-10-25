@@ -30,6 +30,7 @@
       php82
       php82Packages.composer
 
+      pnpm
       # rustc
       # cargo
       # rustup
