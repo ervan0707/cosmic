@@ -16,10 +16,11 @@
 
       # Use fish as default shell
       shellHook = ''
-        exec fish -c '
-          ${shellHook}
-          fish
-        '
+        # Preserve all environment variables before switching to fish
+        ${shellHook}
+
+        # Start fish with inherited environment
+        exec fish
       '';
     };
 }

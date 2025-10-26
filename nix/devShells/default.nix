@@ -5,7 +5,7 @@
 }:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
-  nodeEnvs = import ./node.nix { inherit pkgs; };
+  nodeEnvs = import ./nodejs.nix { inherit pkgs; };
 
   # Get all nodejs versions directly
   nodejsVersions = builtins.filter (lib.strings.hasPrefix "nodejs_") (builtins.attrNames pkgs);
@@ -17,7 +17,7 @@ in
   lua = import ./lua.nix { inherit pkgs; };
   php = import ./php.nix { inherit pkgs; };
   nix = import ./nix.nix { inherit pkgs; };
-  node = nodeEnvs.default;
+  nodejs = nodeEnvs.default;
 }
 // builtins.listToAttrs (
   map (version: {

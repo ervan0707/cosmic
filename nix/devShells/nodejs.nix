@@ -26,14 +26,18 @@ let
       env = {
         NODE_ENV = "development";
         NPM_CONFIG_PREFIX = "$PWD/.npm-global";
-        PATH = "$PWD/node_modules/.bin:$PATH";
       };
 
       shellHook = ''
+        # Ensure the correct Node.js version is used by prepending to PATH
+        export PATH="${nodejs}/bin:$PWD/node_modules/.bin:$PATH"
+
         echo "🚀 Welcome to ${nodeVersion} development environment!"
         echo "Available tools:"
-        echo "  - node:" (node --version)
-        echo "  - typescript:" (tsc --version)
+        echo "  - node: $(node --version)"
+        echo "  - typescript: $(tsc --version)"
+        echo ""
+        echo "Node.js binary: $(which node)"
       '';
     };
 in
