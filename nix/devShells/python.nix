@@ -1,7 +1,7 @@
 { pkgs }:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
-  python = pkgs.python39;
+  python = pkgs.python3;
   pythonEnv = python.withPackages (
     ps: with ps; [
       # ruff
