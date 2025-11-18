@@ -27,7 +27,7 @@
       nodejs_20
       typescript
 
-      php82
+      (php82.withExtensions ({ enabled, all }: enabled ++ [ all.mongodb ]))
       php82Packages.composer
 
       pnpm
