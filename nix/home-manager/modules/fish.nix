@@ -99,8 +99,8 @@
 
           set -g fish_greeting ""
 
-          # custom paths to PATH (user-agnostic)
-          set -gx PATH $PATH $HOME/.local/bin/claude $HOME/.opencode/bin
+          # custom paths to PATH (user-agnostic, reliable)
+          fish_add_path --prepend $HOME/.local/bin/claude $HOME/.opencode/bin
 
           # Initialize Starship
           # starship init fish | source

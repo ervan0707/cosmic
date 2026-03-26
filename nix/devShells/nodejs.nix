@@ -29,19 +29,15 @@ let
       };
 
       shellHook = ''
-        # For Fish shell, use fish_add_path to ensure correct Node.js version
-        if test -n "$FISH_VERSION"
-          fish_add_path --prepend "${nodejs}/bin" "$PWD/node_modules/.bin"
-        else
-          export PATH="${nodejs}/bin:$PWD/node_modules/.bin:$PATH"
-        fi
+        # Only Fish syntax, since shell always execs fish
+        fish_add_path --prepend "${nodejs}/bin" "$PWD/node_modules/.bin"
 
         echo "🚀 Welcome to ${nodeVersion} development environment!"
         echo "Available tools:"
-        echo "  - node: $(node --version)"
-        echo "  - typescript: $(tsc --version)"
+        echo "  - node: (node --version)"
+        echo "  - typescript: (tsc --version)"
         echo ""
-        echo "Node.js binary: $(which node)"
+        echo "Node.js binary: (which node)"
       '';
     };
 in
