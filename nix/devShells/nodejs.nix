@@ -29,8 +29,12 @@ let
       };
 
       shellHook = ''
-        # Ensure the correct Node.js version is used by prepending to PATH
-        export PATH="${nodejs}/bin:$PWD/node_modules/.bin:$PATH"
+        # For Fish shell, use fish_add_path to ensure correct Node.js version
+        if test -n "$FISH_VERSION"
+          fish_add_path --prepend "${nodejs}/bin" "$PWD/node_modules/.bin"
+        else
+          export PATH="${nodejs}/bin:$PWD/node_modules/.bin:$PATH"
+        fi
 
         echo "🚀 Welcome to ${nodeVersion} development environment!"
         echo "Available tools:"
