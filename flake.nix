@@ -42,7 +42,7 @@
       systems = builtins.attrValues (builtins.mapAttrs (name: value: value.system) lib.utils.systems);
       imports = [
         ./overlays
-        ./overlays/pkgs/nodePkgs
+        # ./overlays/pkgs/nodePkgs
       ];
       perSystem =
         {
