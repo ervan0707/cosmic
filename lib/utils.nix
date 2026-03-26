@@ -6,7 +6,7 @@
 let
   overlays = [
     inputs.self.overlays.macos
-    inputs.self.overlays.nodePackages
+    # inputs.self.overlays.nodePackages
   ];
 in
 {
