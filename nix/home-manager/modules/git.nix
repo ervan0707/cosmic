@@ -22,7 +22,8 @@
         { path = "~/.gitconfig.local"; }
       ];
 
-      aliases = {
+      settings = {
+        alias = {
         # Common shortcuts
         st = "status";
         co = "checkout";
@@ -71,6 +72,7 @@
         tags = "tag -l";
         remotes = "remote -v";
         contributors = "shortlog --summary --numbered";
+        };
       };
     };
   };
