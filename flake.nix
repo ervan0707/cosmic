@@ -11,10 +11,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixvim = {
-      url = "github:Ervan0707/cosmic?dir=nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nixvim = {
+    #   url = "github:Ervan0707/cosmic?dir=nixvim";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     tmux-gruvbox = {
       url = "github:egel/tmux-gruvbox";
       flake = false;
@@ -59,13 +59,13 @@
 
           # NixVim package and app
           packages = {
-            nixvim = inputs.nixvim.packages.${system}.default;
-            default = inputs.nixvim.packages.${system}.default;
+            # nixvim = inputs.nixvim.packages.${system}.default;
+            # default = inputs.nixvim.packages.${system}.default;
           };
 
           apps = {
-            nixvim = inputs.nixvim.apps.${system}.default;
-            default = inputs.nixvim.apps.${system}.default;
+            # nixvim = inputs.nixvim.apps.${system}.default;
+            # default = inputs.nixvim.apps.${system}.default;
           };
         };
 
