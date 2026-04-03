@@ -20,7 +20,7 @@ let
 
       packages = with pkgs; [
         nodejs
-        nodePackages.typescript
+        typescript
       ];
 
       env = {

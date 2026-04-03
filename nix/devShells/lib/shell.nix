@@ -16,8 +16,15 @@
 
       # Use fish as default shell
       shellHook = ''
-        # Start fish with inherited environment and run fish-specific hooks
-        exec fish -C '${shellHook}'
+        # Save nix develop PATH before fish reinitializes it
+        export __NIX_DEVELOP_PATH="$PATH"
+
+        # Start fish, restore PATH priority, then run shell-specific hooks
+        exec fish -C '
+          set -gx PATH (string split ":" $__NIX_DEVELOP_PATH)
+          set -e __NIX_DEVELOP_PATH
+          ${shellHook}
+        '
       '';
     };
 }
