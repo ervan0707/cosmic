@@ -15,8 +15,8 @@
     home.packages =
       with pkgs;
       let
-        phpWithExtensions = php82.withExtensions ({ enabled, all }: enabled ++ [ all.mongodb ]);
-        composerWithPhp = php82Packages.composer.override { php = phpWithExtensions; };
+        phpWithExtensions = php84.withExtensions ({ enabled, all }: enabled ++ [ all.mongodb ]);
+        composerWithPhp = php84Packages.composer.override { php = phpWithExtensions; };
       in
       [
         # ruff
@@ -30,7 +30,7 @@
         # inputs.nixvim.packages.${pkgs.system}.default
         pkgs.r-auth
 
-        nodejs_20
+        nodejs_22
         typescript
 
         phpWithExtensions

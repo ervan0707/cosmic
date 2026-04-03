@@ -52,7 +52,7 @@
           end
         end
 
-        # https://github.com/LnL7/nix-darwin/issues/122
+        # https://github.com/nix-darwin/nix-darwin/issues/122
         for p in (string split : ${config.environment.systemPath})
           if not contains $p $fish_user_paths
             set -g fish_user_paths $fish_user_paths $p
@@ -60,8 +60,6 @@
         end
       '';
   };
-
-  # services.nix-daemon.enable = true;
 
   security.pam.services.sudo_local.touchIdAuth = true; # Enable Touch ID for sudo
 
