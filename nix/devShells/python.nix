@@ -25,10 +25,8 @@ mkShellConfig {
   ];
 
   shellHook = ''
-    echo "🚀 Welcome to Python development environment!"
-    echo "Available tools:"
-    echo "  - python: $(python --version)"
-    echo "  - poetry: $(poetry --version)"
-    # echo "  - black: $(black --version)"
+    echo "Welcome to Python development environment!"
+    echo "  python: "(python --version)
+    echo "  poetry: "(poetry --version)
   '';
 }

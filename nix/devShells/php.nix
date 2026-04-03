@@ -7,20 +7,16 @@ mkShellConfig {
 
   packages = with pkgs; [
     # PHP with common extensions
-    php82
-    php82Packages.composer
+    php84
+    php84Packages.composer
   ];
 
   # Environment variables
   env = { };
 
   shellHook = ''
-    echo "🐘 Welcome to PHP development environment!"
-    echo "Available tools:"
-    echo "  - php: " (php -v)
-    echo "  - composer: " (composer --version)
-    echo ""
-    echo "Xdebug is available for debugging"
-    echo "PHP Language Server available via phpactor"
+    echo "Welcome to PHP development environment!"
+    echo "  php: "(php -v | head -1)
+    echo "  composer: "(composer --version)
   '';
 }

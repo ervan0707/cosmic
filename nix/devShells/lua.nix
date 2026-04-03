@@ -34,16 +34,10 @@ mkShellConfig {
   };
 
   shellHook = ''
-    echo "🌙 Welcome to Lua development environment!"
-    echo "Available tools:"
-    echo "  - lua: $(lua -v)"
-    echo "  - luajit: $(luajit -v)"
-    echo "  - luarocks: $(luarocks --version)"
-    echo "  - stylua: $(stylua --version)"
-    echo ""
-    echo "LSP server is available via lua-language-server"
-    echo "Formatter available via stylua"
-    echo "Linting available via selene and luacheck"
+    echo "Welcome to Lua development environment!"
+    echo "  lua: "(lua -v)
+    echo "  luajit: "(luajit -v)
+    echo "  luarocks: "(luarocks --version)
   '';
 
 }

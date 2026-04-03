@@ -29,21 +29,17 @@ let
       };
 
       shellHook = ''
-        # Only Fish syntax, since shell always execs fish
-        fish_add_path --prepend "${nodejs}/bin" "$PWD/node_modules/.bin"
-
-        echo "🚀 Welcome to ${nodeVersion} development environment!"
-        echo "Available tools:"
-        echo "  - node: (node --version)"
-        echo "  - typescript: (tsc --version)"
-        echo ""
-        echo "Node.js binary: (which node)"
+        fish_add_path --prepend ${nodejs}/bin $PWD/node_modules/.bin
+        echo "Welcome to ${nodeVersion} development environment!"
+        echo "  node: "(node --version)
+        echo "  typescript: "(tsc --version)
+        echo "  binary: "(which node)
       '';
     };
 in
 {
-  # Default to latest LTS (node 20)
-  default = mkNodeShell "nodejs_20";
+  # Default to latest LTS (node 22)
+  default = mkNodeShell "nodejs_22";
 }
 // builtins.listToAttrs (
   map (version: {

@@ -9,6 +9,6 @@ mkShellConfig {
   ];
 
   shellHook = ''
-    echo "🚀 Welcome to Nix development environment!"
+    echo "Welcome to Nix development environment!"
   '';
 }

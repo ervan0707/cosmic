@@ -11,11 +11,9 @@ mkShellConfig {
   ];
 
   shellHook = ''
-    echo "🚀 Welcome to Rust development environment!"
-    echo "Available tools:"
-    echo "  - rustc: $(rustc --version)"
-    echo "  - cargo: $(cargo --version)"
-    echo "  - rust-analyzer: $(rust-analyzer --version)"
+    echo "Welcome to Rust development environment!"
+    echo "  rustc: "(rustc --version)
+    echo "  cargo: "(cargo --version)
   '';
 
 }
