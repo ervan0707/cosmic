@@ -235,11 +235,44 @@ Access Neovim:
 nix run .#nixvim
 ```
 
+## 🗄️ Cachix (Binary Cache)
+
+This project uses [Cachix](https://cachix.org/) to avoid rebuilding packages locally. Pre-built packages are served from the `skinnyvans` cache.
+
+### Using the cache (pulling)
+
+The cache is already configured in `nix/darwin/nix.nix`. After rebuilding, Nix will automatically pull cached binaries from `skinnyvans.cachix.org` before attempting a local build.
+
+On a fresh machine before the first rebuild, add the cache manually:
+
+```bash
+nix profile install nixpkgs#cachix
+cachix use skinnyvans
+```
+
+### Pushing to the cache
+
+After building, push the results so future builds (or other machines) can skip compilation:
+
+```bash
+# Authenticate (get your token from https://app.cachix.org → Auth Tokens)
+cachix authtoken <your-token>
+
+# Push after a rebuild
+darwin-rebuild switch --flake .#personal |& cachix push skinnyvans
+
+# Or push a specific build
+nix build .#darwinConfigurations.personal.system |& cachix push skinnyvans
+```
+
 ## 📦 Updating Dependencies
 
 Update Nix flake inputs:
 ```bash
 nix flake update
+
+# After updating, push new builds to cache
+darwin-rebuild switch --flake .#personal |& cachix push skinnyvans
 ```
 
 ## 🎯 Quick Run Cheatsheet
