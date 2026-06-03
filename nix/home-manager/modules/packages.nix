@@ -40,6 +40,7 @@
         # rustc
         # cargo
         # rustup
+        glab
 
       ];
   };
