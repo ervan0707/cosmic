@@ -54,21 +54,21 @@
             eslint_d
             typescript-language-server
 
-            gopls
-            gomodifytags
-            golangci-lint
-            impl
+            # gopls
+            # gomodifytags
+            # golangci-lint
+            # impl
 
-            stylua
-            lua-language-server
+            # stylua
+            # lua-language-server
 
             nixd
             nixfmt-rfc-style
 
-            pyright
+            # pyright
 
-            rust-analyzer
-            rustfmt
+            # rust-analyzer
+            # rustfmt
 
           ];
         };
