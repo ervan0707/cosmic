@@ -100,7 +100,7 @@
           set -x CODESTATS_API_KEY $(cat ${config.sops.secrets.codestats_api_key.path})
           set -x GITHUB_TOKEN $(cat ${config.sops.secrets.github_token.path})
           set -x EXPO_APPLE_APP_SPECIFIC_PASSWORD $(cat ${config.sops.secrets.expo_apple_app_spesific_password.path})
-
+          set -x GITLAB_TOKEN $(cat ${config.sops.secrets.gitlab_token.path})
 
           set -g fish_greeting ""
 
