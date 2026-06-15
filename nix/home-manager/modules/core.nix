@@ -29,12 +29,14 @@
 
     home.activation.installGhostty = lib.mkIf pkgs.stdenv.isDarwin (
       lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        export GH_TOKEN=$(cat ${config.sops.secrets.github_token.path}) && \
-        [[ ! -d ~/Applications/Ghostty.app ]] && cd /tmp && \
-          ${lib.getExe pkgs.gh} release download -R mitchellh/ghostty tip -p 'ghostty-macos-universal.zip' --clobber && \
-          rm -rf ~/Applications/Ghostty.app && \
-          ${lib.getExe pkgs.unzip} -d ~/Applications ghostty-macos-universal.zip && \
-          rm -f ghostty-macos-universal.zip || exit 0
+        if [[ ! -d ~/Applications/Ghostty.app ]]; then
+          export GH_TOKEN=$(cat ${config.sops.secrets.github_token.path})
+          ( cd /tmp && \
+            ${lib.getExe pkgs.gh} release download -R mitchellh/ghostty tip -p 'ghostty-macos-universal.zip' --clobber && \
+            rm -rf ~/Applications/Ghostty.app && \
+            ${lib.getExe pkgs.unzip} -d ~/Applications ghostty-macos-universal.zip && \
+            rm -f ghostty-macos-universal.zip ) || true
+        fi
       ''
     );
 
