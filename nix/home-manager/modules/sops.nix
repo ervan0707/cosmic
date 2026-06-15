@@ -24,6 +24,7 @@
         username = { };
         codestats_api_key = { };
         github_token = { };
+        expo_apple_app_spesific_password = {};
       };
     };
   };
