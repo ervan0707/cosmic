@@ -12,6 +12,9 @@
 
   config = lib.mkIf config.modules.fish.enable {
 
+    # custom paths to PATH (declarative, stateless, survives rebuilds)
+    home.sessionPath = [ "$HOME/.local/bin" ];
+
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -100,9 +103,6 @@
 
 
           set -g fish_greeting ""
-
-          # custom paths to PATH (user-agnostic, reliable)
-          fish_add_path --prepend $HOME/.local/bin
 
           # Initialize Starship
           # starship init fish | source
