@@ -194,6 +194,10 @@
         local builtins = null_ls.builtins
         local code_actions = builtins.code_actions
 
+        -- Created once; cleared per-buffer in on_attach so format-on-save
+        -- stays registered for every attached buffer, not just the last one.
+        local format_on_save = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
+
 
         null_ls.setup({
           sources = {
@@ -215,7 +219,7 @@
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Show hover documentation" })
             -- Enable formatting on sync
             if client.supports_method("textDocument/formatting") then
-              local format_on_save = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
+              vim.api.nvim_clear_autocmds({ group = format_on_save, buffer = bufnr })
               vim.api.nvim_create_autocmd('BufWritePre', {
                 group = format_on_save,
                 buffer = bufnr,
