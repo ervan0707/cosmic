@@ -23,10 +23,10 @@
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sketchybar-app-font = {
-      url = "github:kvndrsslr/sketchybar-app-font";
-      flake = false;
-    };
+    # sketchybar-app-font = {
+    #   url = "github:kvndrsslr/sketchybar-app-font";
+    #   flake = false;
+    # };
   };
 
   outputs =
@@ -41,7 +41,7 @@
       # Get systems from utils.systems keys and map them to include their architecture
       systems = builtins.attrValues (builtins.mapAttrs (name: value: value.system) lib.utils.systems);
       imports = [
-        ./overlays
+        # ./overlays
         # ./overlays/pkgs/nodePkgs
       ];
       perSystem =

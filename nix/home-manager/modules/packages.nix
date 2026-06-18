@@ -28,7 +28,7 @@
 
         # fastfetch
         # inputs.nixvim.packages.${pkgs.system}.default
-        pkgs.r-auth
+        # pkgs.r-auth
 
         nodejs_22
         typescript
