@@ -2,10 +2,9 @@
   lib,
   pkgs,
   config,
+  username,
   ...
-}: let
-  username = builtins.head (builtins.attrNames config.users.users);
-in {
+}: {
   system = {
     primaryUser = username;
     defaults = {

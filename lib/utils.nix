@@ -53,6 +53,7 @@ in
         ../nix/darwin
         {
           users.users.${username}.home = homeDirectory;
+          _module.args = { inherit username homeDirectory; };
         }
 
         inputs.home-manager.darwinModules.home-manager
