@@ -12,6 +12,9 @@
 
   config = lib.mkIf config.modules.fish.enable {
 
+    # custom paths to PATH (declarative, stateless, survives rebuilds)
+    home.sessionPath = [ "$HOME/.local/bin" ];
+
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -96,11 +99,10 @@
 
           set -x CODESTATS_API_KEY $(cat ${config.sops.secrets.codestats_api_key.path})
           set -x GITHUB_TOKEN $(cat ${config.sops.secrets.github_token.path})
+          set -x EXPO_APPLE_APP_SPECIFIC_PASSWORD $(cat ${config.sops.secrets.expo_apple_app_spesific_password.path})
+          set -x GITLAB_TOKEN $(cat ${config.sops.secrets.gitlab_token.path})
 
           set -g fish_greeting ""
-
-          # custom paths to PATH (user-agnostic, reliable)
-          fish_add_path --prepend $HOME/.local/bin $HOME/.opencode/bin
 
           # Initialize Starship
           # starship init fish | source

@@ -1,6 +1,19 @@
 { ... }:
 {
   nix.optimise.automatic = true;
+
+  # automatic garbage collection of old generations / unused store paths
+  nix.gc = {
+    automatic = true;
+    # launchd StartCalendarInterval: weekly, Sunday 03:15
+    interval = {
+      Weekday = 0;
+      Hour = 3;
+      Minute = 15;
+    };
+    options = "--delete-older-than 14d";
+  };
+
   nix.settings = {
     substituters = [
       "https://cache.nixos.org"
