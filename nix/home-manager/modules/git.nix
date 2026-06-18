@@ -15,9 +15,19 @@
 
     ];
 
+    # Write the git identity into ~/.gitconfig.local once per activation.
+    # This used to run on every git invocation via a package wrapper, which
+    # locked ~/.gitconfig.local each time and made parallel git calls (e.g.
+    # eas build) fail with "could not lock config file ... File exists".
+    # Reading from the sops secret path keeps the values out of the nix store.
+    home.activation.gitLocalConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      ${pkgs.git}/bin/git config --file "$HOME/.gitconfig.local" user.email "$(cat ${config.sops.secrets.email.path})"
+      ${pkgs.git}/bin/git config --file "$HOME/.gitconfig.local" user.name "$(cat ${config.sops.secrets.username.path})"
+    '';
+
     programs.git = {
       enable = true;
-      package = pkgs.gitWithConfig config;
+      package = pkgs.git;
       includes = [
         { path = "~/.gitconfig.local"; }
       ];

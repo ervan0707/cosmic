@@ -12,7 +12,6 @@
       ruff = prev.ruff.overrideAttrs (old: {
         doCheck = false;
       });
-      gitWithConfig = prev.callPackage ./pkgs/git.nix { };
       # sbar_menus = prev.callPackage ./pkgs/sketchybar/helpers/menus { };
       # sbar_events = prev.callPackage ./pkgs/sketchybar/helpers/event_providers { };
       # sbarLua = prev.callPackage ./pkgs/sketchybar/helpers/sbar.nix { };
