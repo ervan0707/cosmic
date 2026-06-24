@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-    # only rebuild when something that affects the closure changes
+    # only rebuild when something that affects a closure changes
     paths:
       - "flake.nix"
       - "flake.lock"
@@ -12,36 +12,74 @@ on:
       - "nix/**"
       - "overlays/**"
       - "secrets/**"
+      - "nixvim/**"
 
 permissions:
   contents: read
 
 jobs:
-  build:
-    # macos-15 / macos-14 are Apple Silicon = aarch64-darwin, matching the
-    # work + personal machines, so the cached store paths hit on pull.
-    # (macos-13 is Intel — do not use it.)
+  # macos-15 / macos-14 are Apple Silicon = aarch64-darwin, matching the work +
+  # personal machines, so the cached store paths hit on pull.
+  # (macos-13 is Intel — do not use it.)
+
+  darwin:
+    name: darwin (${{ matrix.profile }})
     runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
         profile: [work, personal]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v22
-
-      - name: Set up cachix (skinnyvans)
-        uses: cachix/cachix-action@v15
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: cachix/cachix-action@v15
         with:
           name: skinnyvans
           # with authToken set, every store path built in this job is pushed
           # to skinnyvans automatically — no explicit `cachix push` step.
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-
       - name: Build ${{ matrix.profile }} system closure
         run: |
           nix build .#darwinConfigurations.${{ matrix.profile }}.system \
+            --no-link --print-out-paths
+
+  devshells:
+    name: dev shells
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: cachix/cachix-action@v15
+        with:
+          name: skinnyvans
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Build all dev shell dependencies
+        # Caching a dev shell = building its `.inputDerivation` (mkShell exposes
+        # this exactly for CI). We can't `nix develop` here because the shellHook
+        # does `exec fish`. Names are enumerated so new shells / nodejs_* versions
+        # are picked up automatically.
+        run: |
+          system="aarch64-darwin"
+          names=$(nix eval --json ".#devShells.$system" --apply builtins.attrNames | jq -r '.[]')
+          for name in $names; do
+            echo "::group::devShell $name"
+            nix build ".#devShells.$system.$name.inputDerivation" \
+              --no-link --print-out-paths
+            echo "::endgroup::"
+          done
+
+  nixvim:
+    name: nixvim
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: cachix/cachix-action@v15
+        with:
+          name: skinnyvans
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Build nixvim package
+        # nixvim is a separate sub-flake with its own flake.lock.
+        run: |
+          nix build ./nixvim#packages.aarch64-darwin.default \
             --no-link --print-out-paths
