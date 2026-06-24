@@ -78,6 +78,37 @@
           cpu = "top -o cpu";
         };
 
+        functions = {
+          # Rebuild from the published config on GitHub (any machine, no local
+          # clone needed). Auto-selects the profile from $USER and pulls
+          # prebuilt binaries from the skinnyvans cachix cache.
+          # `command -v` resolves the absolute path so sudo (which strips PATH
+          # to a secure_path) can still find darwin-rebuild.
+          rebuild = ''
+            set -l profile
+            switch $USER
+              case ss;    set profile work
+              case ervan; set profile personal
+              case '*';   echo "No profile for user $USER"; return 1
+            end
+            echo "🔧 Rebuilding $profile from github:Ervan0707/cosmic"
+            sudo (command -v darwin-rebuild) switch --flake github:Ervan0707/cosmic#$profile
+          '';
+
+          # Rebuild from the local working copy — use while editing config, to
+          # test uncommitted changes before pushing. Run from inside the clone.
+          rebuild-local = ''
+            set -l profile
+            switch $USER
+              case ss;    set profile work
+              case ervan; set profile personal
+              case '*';   echo "No profile for user $USER"; return 1
+            end
+            echo "🔧 Rebuilding $profile from local working copy"
+            sudo (command -v darwin-rebuild) switch --flake .#$profile
+          '';
+        };
+
         interactiveShellInit = ''
           set -g fish_color_autosuggestion '555'  'brblack'
           set -g fish_color_cancel -r

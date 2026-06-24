@@ -1,0 +1,47 @@
+name: build-and-cache
+on:
+  workflow_dispatch: # allows manual triggers
+  push:
+    branches:
+      - main
+    # only rebuild when something that affects the closure changes
+    paths:
+      - "flake.nix"
+      - "flake.lock"
+      - "lib/**"
+      - "nix/**"
+      - "overlays/**"
+      - "secrets/**"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # macos-15 / macos-14 are Apple Silicon = aarch64-darwin, matching the
+    # work + personal machines, so the cached store paths hit on pull.
+    # (macos-13 is Intel — do not use it.)
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [work, personal]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v22
+
+      - name: Set up cachix (skinnyvans)
+        uses: cachix/cachix-action@v15
+        with:
+          name: skinnyvans
+          # with authToken set, every store path built in this job is pushed
+          # to skinnyvans automatically — no explicit `cachix push` step.
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build ${{ matrix.profile }} system closure
+        run: |
+          nix build .#darwinConfigurations.${{ matrix.profile }}.system \
+            --no-link --print-out-paths

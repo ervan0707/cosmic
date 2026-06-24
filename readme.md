@@ -167,9 +167,17 @@ nix build .#darwinConfigurations.personal.system
 ./result/sw/bin/darwin-rebuild switch --flake .#personal
 ```
 
-After the initial build, you can use the shorter form:
+> **Why `./result/sw/bin/...`?** On a brand-new machine `darwin-rebuild` isn't
+> on your `PATH` yet, so you build it first and call it out of `./result`. This
+> is a **one-time bootstrap step**. After the first switch, `darwin-rebuild` is
+> installed system-wide and you should use the `rebuild` helper below instead.
+
+After the initial build, **never type the long command again** — use the shell
+helpers (see [Daily Workflow](#-daily-workflow)):
+
 ```bash
-darwin-rebuild switch --flake .#work  # or .#personal
+rebuild         # build & switch the right profile, from the published config
+rebuild-local   # same, but from your local working copy (for testing edits)
 ```
 
 #### Option B: Home Manager Only (for non-system configuration)
@@ -198,6 +206,64 @@ Choose Option B if you:
 - Are using a non-macOS system
 - Don't want to modify system settings
 - Need a more portable configuration
+
+## 🔁 Daily Workflow
+
+The whole point of this setup: **CI builds, machines pull.** You edit config on
+one machine, push, and every machine syncs by pulling prebuilt binaries from the
+cache — no local compilation.
+
+```
+edit config → git push → GitHub Actions builds work + personal → pushes to skinnyvans cache
+                                                                         │
+                              any machine:  rebuild  ◀── pulls binaries ─┘
+```
+
+### The two helper commands
+
+Both are defined declaratively in `nix/home-manager/modules/fish.nix` and
+auto-select the profile from `$USER` (`ss` → work, `ervan` → personal), so the
+**same command works on every machine**:
+
+| Command | Builds from | When to use |
+|---|---|---|
+| `rebuild` | `github:Ervan0707/cosmic` (the published config) | Normal sync — consume changes on any machine. No local clone needed. |
+| `rebuild-local` | `.#<profile>` (current directory) | While editing config — test uncommitted changes before pushing. Run from inside your clone. |
+
+### Typical loop
+
+```bash
+# On the machine where you make changes:
+#   ...edit files...
+rebuild-local          # test the change locally
+git add -A && git commit -m "..." && git push   # publish → CI warms the cache
+
+# On every other machine (after CI's green check):
+rebuild                # pulls flake from GitHub + binaries from cachix, then switches
+```
+
+> **Notes**
+> - `rebuild` runs `sudo darwin-rebuild switch` under the hood (system activation
+>   needs root; you'll get a Touch ID prompt). It resolves the absolute path so
+>   sudo's restricted `PATH` doesn't cause "command not found".
+> - These are **macOS-only**. On the Linux `vm` profile use `home-manager switch`.
+> - **Timing:** if you `rebuild` before CI finishes building, that machine will
+>   compile locally once (slower, but not broken). Wait for the green check to
+>   get the cache benefit.
+
+### 🤖 CI: automated cache builds
+
+`.github/workflows/build-cache.yml` builds both profiles on every push to `main`
+(that touches the closure) and pushes the results to `skinnyvans`. It runs on an
+Apple-Silicon `macos-15` runner so the store paths match your machines exactly.
+
+**One-time setup:** add a repository secret named `CACHIX_AUTH_TOKEN`
+(GitHub → Settings → Secrets and variables → Actions) with a **write**-scoped
+token from app.cachix.org → `skinnyvans` → Auth Tokens. Building needs **no** age
+key — secrets are only decrypted at activation time on the machine, not at build.
+
+You can also trigger a cache build manually from the Actions tab
+(`workflow_dispatch`), e.g. after a `nix flake update`.
 
 ## 💻 Development Shells
 
@@ -237,42 +303,71 @@ nix run .#nixvim
 
 ## 🗄️ Cachix (Binary Cache)
 
-This project uses [Cachix](https://cachix.org/) to avoid rebuilding packages locally. Pre-built packages are served from the `skinnyvans` cache.
+This project uses [Cachix](https://cachix.org/) so machines pull prebuilt
+binaries instead of compiling. Pre-built packages are served from the
+`skinnyvans` cache. In normal use **[CI](#-ci-automated-cache-builds) is the only
+thing that pushes** — your machines are pull-only and need no auth token.
 
-### Using the cache (pulling)
+### Pulling (automatic)
 
-The cache is already configured in `nix/darwin/nix.nix`. After rebuilding, Nix will automatically pull cached binaries from `skinnyvans.cachix.org` before attempting a local build.
+The cache is configured system-wide in `nix/darwin/nix.nix`, so after the first
+switch every `rebuild` automatically pulls from `skinnyvans.cachix.org` before
+attempting a local build. Nothing to do.
 
-On a fresh machine before the first rebuild, add the cache manually:
+**Chicken-and-egg on a fresh machine:** that config only takes effect *after* the
+first switch, so the very first build won't use the cache unless you add it
+manually first (see step 0 of [New Machine Setup](#-new-machine-setup)):
 
 ```bash
 nix profile install nixpkgs#cachix
 cachix use skinnyvans
 ```
 
-### Pushing to the cache
+### Pushing (manual fallback)
 
-After building, push the results so future builds (or other machines) can skip compilation:
+CI handles pushing. You only need this if you build something locally that CI
+hasn't cached and want to share it:
 
 ```bash
-# Authenticate (get your token from https://app.cachix.org → Auth Tokens)
-cachix authtoken <your-token>
-
-# Push after a rebuild
-darwin-rebuild switch --flake .#personal |& cachix push skinnyvans
-
-# Or push a specific build
-nix build .#darwinConfigurations.personal.system |& cachix push skinnyvans
+cachix authtoken <write-scoped-token>   # from app.cachix.org → Auth Tokens
+sudo (command -v darwin-rebuild) switch --flake .#personal |& cachix push skinnyvans
 ```
+
+## 🆕 New Machine Setup
+
+Getting a fresh machine fully synced:
+
+```bash
+# 0. Add the cache BEFORE the first build (otherwise it compiles from source)
+nix profile install nixpkgs#cachix
+cachix use skinnyvans
+
+# 1. Put your age key in place (decrypts sops secrets) — copy from another
+#    machine or your password manager:
+mkdir -p ~/.config/sops/age
+#    → place keys.txt at ~/.config/sops/age/keys.txt
+
+# 2. First bootstrap (darwin-rebuild isn't on PATH yet, so call it from ./result)
+nix build github:Ervan0707/cosmic#darwinConfigurations.personal.system   # or work
+sudo ./result/sw/bin/darwin-rebuild switch --flake github:Ervan0707/cosmic#personal
+```
+
+After this first switch you're done — `darwin-rebuild` and the `rebuild` helper
+are installed system-wide. **From now on it's just `rebuild`** (see
+[Daily Workflow](#-daily-workflow)). You don't even need a local clone unless you
+want to edit the config.
+
+**What to carry over (not in git):**
+- **Age key** → `~/.config/sops/age/keys.txt` (required — secrets won't decrypt without it)
+- **Cachix token** → only if this machine should *push* to the cache (read/pull needs none)
 
 ## 📦 Updating Dependencies
 
-Update Nix flake inputs:
+Update Nix flake inputs (or let the weekly `update-flakes.yml` workflow open a PR):
 ```bash
 nix flake update
-
-# After updating, push new builds to cache
-darwin-rebuild switch --flake .#personal |& cachix push skinnyvans
+git add flake.lock && git commit -m "chore: update flake.lock" && git push
+# CI rebuilds and warms the cache; then `rebuild` on each machine pulls binaries
 ```
 
 ## 🎯 Quick Run Cheatsheet
