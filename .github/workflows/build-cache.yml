@@ -64,9 +64,17 @@ jobs:
         # warnings) and only fail the job if nothing builds at all.
         run: |
           system="aarch64-darwin"
+          # Building these takes a long time and they aren't used day-to-day,
+          # so skip them in CI.
+          skip="nodejs_25-dev nodejs_26-dev"
           names=$(nix eval --json ".#devShells.$system" --apply builtins.attrNames | jq -r '.[]')
           ok=0; skipped=""
           for name in $names; do
+            if echo " $skip " | grep -q " $name "; then
+              echo "::warning::skipped devShell '$name' — excluded from CI (slow build)"
+              skipped="$skipped $name"
+              continue
+            fi
             echo "::group::devShell $name"
             if nix build ".#devShells.$system.$name.inputDerivation" \
                  --no-link --print-out-paths; then
