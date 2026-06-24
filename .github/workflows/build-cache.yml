@@ -58,15 +58,31 @@ jobs:
         # this exactly for CI). We can't `nix develop` here because the shellHook
         # does `exec fish`. Names are enumerated so new shells / nodejs_* versions
         # are picked up automatically.
+        # Some enumerated shells (e.g. EOL nodejs_* versions) are marked insecure
+        # and refuse to evaluate — caching them wouldn't help anyway, since the
+        # same check fires on the user's machine. So skip failures (surfaced as
+        # warnings) and only fail the job if nothing builds at all.
         run: |
           system="aarch64-darwin"
           names=$(nix eval --json ".#devShells.$system" --apply builtins.attrNames | jq -r '.[]')
+          ok=0; skipped=""
           for name in $names; do
             echo "::group::devShell $name"
-            nix build ".#devShells.$system.$name.inputDerivation" \
-              --no-link --print-out-paths
+            if nix build ".#devShells.$system.$name.inputDerivation" \
+                 --no-link --print-out-paths; then
+              ok=$((ok + 1))
+            else
+              echo "::warning::skipped devShell '$name' — failed to build (e.g. insecure/EOL package)"
+              skipped="$skipped $name"
+            fi
             echo "::endgroup::"
           done
+          [ -n "$skipped" ] && echo "::warning title=dev shells skipped::$skipped"
+          if [ "$ok" -eq 0 ]; then
+            echo "::error::no dev shells could be built"
+            exit 1
+          fi
+          echo "cached $ok dev shell(s); skipped:${skipped:- none}"
 
   nixvim:
     name: nixvim
