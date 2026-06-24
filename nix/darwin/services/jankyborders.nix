@@ -2,7 +2,7 @@
 {
   services = {
     jankyborders = {
-      enable = true;
+      enable = false;
 
       style = "round";
       width = 10.0;

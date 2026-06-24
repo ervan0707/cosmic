@@ -41,7 +41,11 @@
           # System
           c = "clear";
           h = "history";
-          path = "echo $PATH | tr ':' '\n'";
+          # NOTE: do NOT name this `path`. That shadows fish's builtin `path`
+          # command, which fish's own completions call (e.g. `path filter` in
+          # git.fish). The shadowing leaked `tr: extra operand 'filter'` errors
+          # while typing git commands. `string split` also drops the tr dependency.
+          showpath = "string split ':' $PATH";
           ports = "netstat -tulanp";
 
           # Network
