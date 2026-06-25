@@ -92,7 +92,10 @@
               case '*';   echo "No profile for user $USER"; return 1
             end
             echo "🔧 Rebuilding $profile from github:Ervan0707/cosmic"
-            sudo (command -v darwin-rebuild) switch --flake github:Ervan0707/cosmic#$profile
+            # --refresh bypasses the flake tarball cache (~1h TTL) so a rebuild
+            # run right after a push picks up the just-pushed commit instead of
+            # a stale cached tree.
+            sudo (command -v darwin-rebuild) switch --refresh --flake github:Ervan0707/cosmic#$profile
           '';
 
           # Rebuild from the local working copy — use while editing config, to
