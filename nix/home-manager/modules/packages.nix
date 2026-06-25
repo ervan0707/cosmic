@@ -25,6 +25,7 @@
 
         tree
         bat
+        devenv
 
         # fastfetch
         # inputs.nixvim.packages.${pkgs.system}.default
