@@ -15,6 +15,13 @@
     # custom paths to PATH (declarative, stateless, survives rebuilds)
     home.sessionPath = [ "$HOME/.local/bin" ];
 
+    # Raise Node's V8 old-space heap. The superpath-mono API's `tsc -w` compile
+    # OOMs at Node's default ~2GB cap on this 8GB machine (yarn dev:api crash,
+    # Jul 2026). 4096 lets tsc + nodemon build cleanly.
+    home.sessionVariables = {
+      NODE_OPTIONS = "--max-old-space-size=4096";
+    };
+
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
