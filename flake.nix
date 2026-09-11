@@ -2,6 +2,14 @@
   description = "Dancing in the wind, as roses born again ✨";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    # Node pinned to exactly 22.11.0. nixpkgs keeps only one patch level per
+    # major, and nixpkgs-unstable's nodejs_22 has moved on to 22.23.x, so the
+    # version has to come from an older rev. This is a nixpkgs-unstable channel
+    # rev from before e4f44407a7a9 ("nodejs_22: 22.11.0 -> 22.12.0", 2024-12-25),
+    # picked because its aarch64-darwin build is still in cache.nixos.org —
+    # no source build. Deliberately does NOT follow nixpkgs; it *is* a nixpkgs.
+    nixpkgs-node.url = "github:nixos/nixpkgs/c792c60b8a97daa7efe41a6e4954497ae410e0c1";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -55,7 +63,7 @@
         }:
         {
           # Development shells
-          devShells = import ./nix/devShells { inherit pkgs; };
+          devShells = import ./nix/devShells { inherit pkgs inputs; };
 
           # NixVim package and app
           packages = {

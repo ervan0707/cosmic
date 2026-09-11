@@ -17,6 +17,10 @@
       let
         phpWithExtensions = php84.withExtensions ({ enabled, all }: enabled ++ [ all.mongodb ]);
         composerWithPhp = php84Packages.composer.override { php = phpWithExtensions; };
+
+        # Node 22.11.0, from the `nixpkgs-node` flake input (see flake.nix).
+        # pkgs.nodejs_22 tracks nixpkgs-unstable and is 22.23.x.
+        nodejsPinned = inputs.nixpkgs-node.legacyPackages.${pkgs.stdenv.hostPlatform.system}.nodejs_22;
       in
       [
         # ruff
@@ -31,11 +35,14 @@
         # inputs.nixvim.packages.${pkgs.system}.default
         # pkgs.r-auth
 
-        nodejs_22
+        nodejsPinned # Node 22.11.0 — see nodejsPinned above
         typescript
 
         # SuperPath local dev (see superpath-mono docs/ONBOARDING.MD §4.1)
-        (yarn.override { nodejs = nodejs_22; }) # Yarn 1.22.x pinned to Node 22 — repo engines requires "22"; stock nixpkgs yarn bundles Node 24 and fails the engine check
+        # Yarn 1.22.22 (final Yarn Classic release) pinned to the same Node as
+        # above — repo engines requires "22", and stock nixpkgs yarn bundles
+        # Node 24, which fails the engine check.
+        (yarn.override { nodejs = nodejsPinned; })
         google-cloud-sdk # gcloud CLI — KMS decrypt of .env.*.enc + Firestore access
         firebase-tools  # firebase CLI — `firebase use` for the api set-env scripts
 

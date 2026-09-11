@@ -1,11 +1,12 @@
 {
   pkgs,
+  inputs,
   lib ? pkgs.lib,
   ...
 }:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
-  nodeEnvs = import ./nodejs.nix { inherit pkgs; };
+  nodeEnvs = import ./nodejs.nix { inherit pkgs inputs; };
 
   # Get all nodejs versions directly
   nodejsVersions = builtins.filter (lib.strings.hasPrefix "nodejs_") (builtins.attrNames pkgs);
