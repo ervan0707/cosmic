@@ -7,10 +7,6 @@
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
 
-  # Node 22.11.0, from the `nixpkgs-node` flake input (see flake.nix).
-  # pkgs.nodejs_22 tracks nixpkgs-unstable and is 22.23.x.
-  nodejsPinned = inputs.nixpkgs-node.legacyPackages.${pkgs.stdenv.hostPlatform.system}.nodejs_22;
-
   # Get available Node.js versions
   nodejsVersions = builtins.filter (lib.strings.hasPrefix "nodejs_") (builtins.attrNames pkgs);
 
@@ -38,8 +34,6 @@ let
         echo "  binary: "(which node)
       '';
     };
-
-  pinnedShell = mkNodeShell "nodejs-22.11.0" nodejsPinned;
 in
 builtins.listToAttrs (
   map (version: {
@@ -48,8 +42,5 @@ builtins.listToAttrs (
   }) nodejsVersions
 )
 // {
-  # Node 22 is pinned to 22.11.0 rather than tracking nixpkgs-unstable, so both
-  # the default shell and `nodejs_22` come from the pinned input.
-  nodejs_22 = pinnedShell;
-  default = pinnedShell;
+  default = mkNodeShell "nodejs_22" pkgs.nodejs_22;
 }

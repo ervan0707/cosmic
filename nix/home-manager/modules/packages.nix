@@ -18,10 +18,6 @@
         phpWithExtensions = php84.withExtensions ({ enabled, all }: enabled ++ [ all.mongodb ]);
         composerWithPhp = php84Packages.composer.override { php = phpWithExtensions; };
 
-        # Node 22.11.0, from the `nixpkgs-node` flake input (see flake.nix).
-        # pkgs.nodejs_22 tracks nixpkgs-unstable and is 22.23.x.
-        nodejsPinned = inputs.nixpkgs-node.legacyPackages.${pkgs.stdenv.hostPlatform.system}.nodejs_22;
-
         # macOS 27's dyld rejects nixpkgs' libffi-trampolines.dylib ("chained fixups,
         # seg_count exceeds number of segments"), so any ctypes callback in a Nix
         # Python aborts with `Assertion failed: (trampoline_handle)` — gcloud dies on
@@ -70,14 +66,14 @@
         # inputs.nixvim.packages.${pkgs.system}.default
         # pkgs.r-auth
 
-        nodejsPinned # Node 22.11.0 — see nodejsPinned above
+        nodejs_22 # tracks nixpkgs-unstable; superpath-mono deps need >=22.22.0
         typescript
 
         # SuperPath local dev (see superpath-mono docs/ONBOARDING.MD §4.1)
         # Yarn 1.22.22 (final Yarn Classic release) pinned to the same Node as
         # above — repo engines requires "22", and stock nixpkgs yarn bundles
         # Node 24, which fails the engine check.
-        (yarn.override { nodejs = nodejsPinned; })
+        (yarn.override { nodejs = nodejs_22; })
         gcloudFixed # gcloud CLI (macOS 27 libffi fix above) — KMS decrypt of .env.*.enc + Firestore access
         firebase-tools  # firebase CLI — `firebase use` for the api set-env scripts
 
