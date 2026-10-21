@@ -39,6 +39,9 @@ in
       username,
       homeDirectory,
       defaultSopsFile,
+      # GID of the nixbld group, fixed by the Nix installer: 350 on installs from ~2024 on,
+      # 30000 on older ones. Override per host in `systems` if it differs.
+      nixbldGid ? 350,
     }:
 
     inputs.darwin.lib.darwinSystem {
@@ -53,6 +56,7 @@ in
         ../nix/darwin
         {
           users.users.${username}.home = homeDirectory;
+          ids.gids.nixbld = nixbldGid;
           _module.args = { inherit username homeDirectory; };
         }
 
