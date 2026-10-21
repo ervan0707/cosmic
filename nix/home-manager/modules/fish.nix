@@ -15,6 +15,31 @@
     # custom paths to PATH (declarative, stateless, survives rebuilds)
     home.sessionPath = [ "$HOME/.local/bin" ];
 
+    # Make fish the login shell on Linux (macOS does this in nix/darwin). Needs root to
+    # add fish to /etc/shells and chsh without a password prompt, so it asks for sudo
+    # when run from a terminal and otherwise prints the commands to run by hand.
+    home.activation.setLoginShell = lib.mkIf pkgs.stdenv.isLinux (
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        fishPath="${config.home.profileDirectory}/bin/fish"
+        currentShell=$(${pkgs.gawk}/bin/awk -F: -v u="${config.home.username}" '$1 == u { print $7 }' /etc/passwd)
+        if [ "$currentShell" != "$fishPath" ]; then
+          sudoBin=""
+          for s in /run/wrappers/bin/sudo /usr/bin/sudo /bin/sudo; do
+            [ -x "$s" ] && { sudoBin="$s"; break; }
+          done
+          if [ -n "$sudoBin" ] && [ -t 0 ]; then
+            echo "Setting login shell of ${config.home.username} to $fishPath (sudo)"
+            grep -qxF "$fishPath" /etc/shells || run "$sudoBin" sh -c "echo '$fishPath' >> /etc/shells"
+            run "$sudoBin" chsh -s "$fishPath" "${config.home.username}" \
+              || warnEcho "Could not change the login shell; continuing"
+          else
+            warnEcho "Login shell is not fish. To change it, run:"
+            warnEcho "  echo $fishPath | sudo tee -a /etc/shells && sudo chsh -s $fishPath ${config.home.username}"
+          fi
+        fi
+      ''
+    );
+
     # Raise Node's V8 old-space heap. The superpath-mono API's `tsc -w` compile
     # OOMs at Node's default ~2GB cap on this 8GB machine (yarn dev:api crash,
     # Jul 2026). 4096 lets tsc + nodemon build cleanly.

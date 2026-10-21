@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  username,
+  ...
+}:
 {
   imports = [
     ./nix.nix
@@ -62,6 +67,16 @@
   };
 
   security.pam.services.sudo_local.touchIdAuth = true; # Enable Touch ID for sudo
+
+  # Make fish the login shell. users.users.<name>.shell only applies to users in
+  # users.knownUsers, which would also need a hardcoded uid per host, so set it directly.
+  system.activationScripts.postActivation.text = ''
+    fishPath=/run/current-system/sw/bin/fish
+    if [ "$(dscl . -read /Users/${username} UserShell | awk '{print $2}')" != "$fishPath" ]; then
+      echo "setting login shell of ${username} to $fishPath" >&2
+      chsh -s "$fishPath" ${username}
+    fi
+  '';
 
   # Used for backwards compatibility, please read the changelog before changing.
   system.stateVersion = 4;
