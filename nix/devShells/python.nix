@@ -1,8 +1,9 @@
 { pkgs }:
 let
   inherit (import ./lib/shell.nix { inherit pkgs; }) mkShellConfig;
-  python = pkgs.python3;
-  pythonEnv = python.withPackages (
+  inherit (import ../lib/libffi-fix.nix { inherit pkgs; }) withLibffiFix;
+  python = pkgs.python314;
+  pythonEnv = withLibffiFix (python.withPackages (
     ps: with ps; [
       # ruff
       # ipython
@@ -13,7 +14,7 @@ let
       # requests
       # poetry
     ]
-  );
+  ));
 in
 mkShellConfig {
   name = "python-dev";
